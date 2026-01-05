@@ -1,0 +1,27 @@
+name: Daily Price Update
+
+on:
+  schedule:
+    # ساعت 11:30 UTC میشه 15:00 به وقت تهران (در زمستان ۳:۳۰ ساعت اختلافه)
+    # اگر تابستان بود ساعت رو بکن 10:30
+    - cron: '30 11 * * *'
+  workflow_dispatch: # برای اینکه دستی هم بتونی اجراش کنی
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 woocommerce
+
+      - name: Run script
+        run: python price.py
